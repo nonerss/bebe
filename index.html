@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a1a;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Floating hearts background */
+        .hearts-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .hearts-bg .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatHeart linear infinite;
+            opacity: 0.15;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.15; }
+            90% { opacity: 0.15; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Sections */
+        .section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Landing */
+        .landing {
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .landing h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            background: linear-gradient(135deg, #ff6b9d, #c44569, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.5)); }
+            50% { filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.8)); }
+        }
+
+        .landing .subtitle {
+            font-size: 1.1rem;
+            color: #c44569;
+            margin-top: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .landing .distance-badge {
+            margin-top: 30px;
+            padding: 15px 35px;
+            border: 2px solid rgba(255, 107, 157, 0.4);
+            border-radius: 50px;
+            font-size: 1.3rem;
+            color: #ff6b9d;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 107, 157, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 107, 157, 0.6); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        .start-btn {
+            margin-top: 40px;
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        }
+
+        /* Sorry section */
+        .sorry-section {
+            background: radial-gradient(ellipse at bottom, #1a0a2e 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .sorry-section .emoji { font-size: 4rem; margin-bottom: 20px; }
+
+        .message-box {
+            max-width: 650px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 107, 157, 0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            line-height: 1.9;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .message-box .highlight {
+            color: #ff6b9d;
+            font-weight: 600;
+        }
+
+        .section h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #ff6b9d;
+            margin-bottom: 30px;
+        }
+
+        /* Not the best section */
+        .notbest-section {
+            background: radial-gradient(ellipse at top, #1a0a2e 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .typewriter {
+            max-width: 650px;
+            font-size: 1.1rem;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.85);
+            overflow: hidden;
+        }
+
+        .typewriter .line {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .typewriter .line.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .typewriter .big-heart {
+            font-size: 3rem;
+            display: block;
+            margin: 20px 0;
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+        }
+
+        /* Lucky / Distance section */
+        .lucky-section {
+            background: radial-gradient(ellipse at center, #0a1a2e 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .distance-display {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d, #ffd93d, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+        }
+
+        .distance-display span {
+            font-size: 0.4em;
+            vertical-align: middle;
+        }
+
+        .map-line {
+            width: 300px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b9d, transparent, #ff6b9d);
+            margin: 20px auto;
+            position: relative;
+            border-radius: 3px;
+        }
+
+        .map-line::before, .map-line::after {
+            content: '❤️';
+            position: absolute;
+            top: -12px;
+            font-size: 1.2rem;
+        }
+
+        .map-line::before { left: -15px; animation: pulseHeart 1.5s ease infinite; }
+        .map-line::after { right: -15px; animation: pulseHeart 1.5s ease infinite 0.75s; }
+
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Money section */
+        .money-section {
+            background: radial-gradient(ellipse at bottom, #1a1a0a 0%, #0a0a1a 70%);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .money-rain-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .money-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: moneyFall linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes moneyFall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(calc(100vh + 50px)) rotate(720deg); opacity: 0; }
+        }
+
+        .money-stack {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .money-stack .bill {
+            font-size: 2.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.3s ease;
+        }
+
+        .money-stack .bill.stacked {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .money-text {
+            max-width: 600px;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .money-text .gold { color: #ffd93d; font-weight: 600; }
+
+        /* Fight section */
+        .fight-section {
+            background: radial-gradient(ellipse at center, #2e0a1a 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .vs-display {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .vs-display .us, .vs-display .enemy {
+            padding: 20px 35px;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .vs-display .us {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), rgba(196, 69, 105, 0.2));
+            border: 2px solid #ff6b9d;
+            color: #ff6b9d;
+        }
+
+        .vs-display .enemy {
+            background: linear-gradient(135deg, rgba(100, 100, 100, 0.2), rgba(80, 80, 80, 0.2));
+            border: 2px solid #666;
+            color: #999;
+        }
+
+        .vs-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffd93d;
+            text-shadow: 0 0 15px rgba(255, 217, 61, 0.5);
+        }
+
+        .fight-message {
+            max-width: 600px;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 20px;
+        }
+
+        /* ===== WEDDING INVITATION SECTION ===== */
+        .wedding-section {
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a1a 70%);
+            text-align: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wedding-card {
+            max-width: 550px;
+            width: 90%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 2px solid rgba(255, 215, 0, 0.25);
+            border-radius: 24px;
+            padding: 50px 35px;
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        .wedding-card::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.12);
+            border-radius: 18px;
+            pointer-events: none;
+        }
+
+        .wedding-tag {
+            font-size: 0.75rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255, 215, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .wedding-manifesting {
+            font-size: 0.8rem;
+            color: rgba(255, 107, 157, 0.6);
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .wedding-invited {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            background: linear-gradient(135deg, #ffd700, #ffec8b, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .wedding-of {
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 25px;
+        }
+
+        .wedding-names {
+            margin: 10px 0;
+        }
+
+        .wedding-names .groom, .wedding-names .bride {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            display: block;
+            margin: 5px 0;
+        }
+
+        .wedding-names .groom {
+            background: linear-gradient(135deg, #87CEEB, #4FC3F7, #87CEEB);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wedding-names .bride {
+            background: linear-gradient(135deg, #ff6b9d, #ff9ff3, #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wedding-and {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #ffd700;
+            margin: 5px 0;
+        }
+
+        .wedding-details {
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.8;
+        }
+
+        .wedding-details .date {
+            font-size: 1.1rem;
+            color: #ffd700;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .wedding-rings {
+            font-size: 2.5rem;
+            margin: 20px 0 10px;
+            animation: ringShine 2s ease-in-out infinite;
+        }
+
+        @keyframes ringShine {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); }
+            50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)); }
+        }
+
+        .wedding-funny {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: rgba(255, 107, 157, 0.08);
+            border: 1px dashed rgba(255, 107, 157, 0.25);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
+        }
+
+        .wedding-divider {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.4), transparent);
+            margin: 20px auto;
+        }
+
+        /* Contact section */
+        .contact-section {
+            background: radial-gradient(ellipse at bottom, #1a0a2e 0%, #0a0a1a 70%);
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s;
+            min-width: 280px;
+            justify-content: center;
+        }
+
+        .contact-link.fb {
+            background: linear-gradient(135deg, rgba(66, 103, 178, 0.2), rgba(66, 103, 178, 0.1));
+            border: 2px solid rgba(66, 103, 178, 0.4);
+            color: #8b9dc3;
+        }
+
+        .contact-link.fb:hover {
+            background: rgba(66, 103, 178, 0.3);
+            border-color: #4267B2;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(66, 103, 178, 0.3);
+        }
+
+        .contact-link.email {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(196, 69, 105, 0.1));
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            color: #ff6b9d;
+        }
+
+        .contact-link.email:hover {
+            background: rgba(255, 107, 157, 0.25);
+            border-color: #ff6b9d;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .final-message {
+            margin-top: 40px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: rgba(255, 107, 157, 0.7);
+        }
+
+        .final-km {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.85rem;
+        }
+
+        /* Next button between sections */
+        .next-btn {
+            margin-top: 40px;
+            padding: 12px 40px;
+            background: transparent;
+            border: 2px solid rgba(255, 107, 157, 0.4);
+            border-radius: 50px;
+            color: #ff6b9d;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            background: rgba(255, 107, 157, 0.1);
+            border-color: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Stars background */
+        .stars {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b9d, #ffd93d);
+            z-index: 100;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+        }
+
+        /* Confetti for wedding */
+        .confetti-piece {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            top: -10px;
+            z-index: 999;
+            pointer-events: none;
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0); opacity: 1; }
+            50% { transform: translateY(-50px) scale(1.2); opacity: 1; }
+            100% { transform: translateY(-150px) scale(0.5); opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .message-box { padding: 25px; font-size: 0.95rem; }
+            .vs-display { gap: 15px; }
+            .wedding-card { padding: 35px 20px; }
+            .contact-link { min-width: 240px; font-size: 0.9rem; padding: 12px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background music -->
+    <audio id="bgMusic" loop>
+        <source src="bgmusic.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Stars background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Floating hearts -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- SECTION 1: Landing -->
+    <div class="section landing visible" id="sec-landing">
+        <h1>For You, My Love</h1>
+        <p class="subtitle">A love that defies distance</p>
+        <div class="distance-badge">📍 1,814 km apart — but never apart in heart</div>
+        <button class="start-btn" onclick="startJourney()">Open My Heart ❤️</button>
+    </div>
+
+    <!-- SECTION 2: Sorry -->
+    <div class="section sorry-section" id="sec-sorry">
+        <div class="emoji">🥺</div>
+        <h2>I'm Sorry...</h2>
+        <div class="message-box">
+            Before anything else, I want to say <span class="highlight">I'm sorry</span>.<br><br>
+            I'm sorry for being me lately... for annoying you, for those moments where we got lost in translation.<br><br>
+            You deserve someone who makes every moment feel light, and I know sometimes I made things heavier than they needed to be.<br><br>
+            <span class="highlight">I'm working on it. For you. For us.</span>
+        </div>
+        <button class="next-btn" onclick="scrollToSection('sec-notbest')">Continue →</button>
+    </div>
+
+    <!-- SECTION 3: Not the best -->
+    <div class="section notbest-section" id="sec-notbest">
+        <h2>A Truth I Need to Say</h2>
+        <div class="typewriter" id="typewriter">
+            <div class="line" data-delay="0">I might not be the best fit for you.</div>
+            <div class="line" data-delay="400">Actually... I <em>know</em> I'm not the best fit for you.</div>
+            <div class="line" data-delay="800">There are a lot of guys out there...</div>
+            <div class="line" data-delay="1200">Smarter ones, funnier ones, closer ones.</div>
+            <div class="line" data-delay="1800"><span class="big-heart">❤️</span></div>
+            <div class="line" data-delay="2200">But you <span class="highlight">picked me</span>.</div>
+            <div class="line" data-delay="2800">And I love you for that — <span class="highlight">more than words can say</span>.</div>
+            <div class="line" data-delay="3400">Since you chose me, I will spend every day<br>trying to be worthy of that choice.</div>
+        </div>
+        <button class="next-btn" onclick="scrollToSection('sec-lucky')" style="margin-top:30px">Continue →</button>
+    </div>
+
+    <!-- SECTION 4: Lucky / Distance -->
+    <div class="section lucky-section" id="sec-lucky">
+        <h2>I Am So Lucky</h2>
+        <p style="color: rgba(255,255,255,0.6); margin-bottom: 10px;">God knows I stared and stared from far away...</p>
+        <div class="distance-display" id="distanceCounter">0 <span>km</span></div>
+        <div class="map-line"></div>
+        <p style="color: rgba(255,255,255,0.5); margin-top: 15px; font-size: 0.9rem;">between us... but my love crosses every kilometer</p>
+        <button class="next-btn" onclick="scrollToSection('sec-money')">Continue →</button>
+    </div>
+
+    <!-- SECTION 5: Money / Power -->
+    <div class="section money-section" id="sec-money">
+        <div class="money-rain-container" id="moneyRain"></div>
+        <h2>If Only I Had the Power</h2>
+        <div class="money-stack" id="moneyStack"></div>
+        <div class="money-text">
+            <span class="gold">If only I got the money... the power...</span><br><br>
+            I could go there in no time 🛫<br>
+            You could go here in no time — <span class="gold">all on me</span> 💛<br><br>
+            We could have traveled different places 🌍<br>
+            We could have lived together 🏠<br>
+            Worked together 💼<br>
+            Had fun together 🎉<br><br>
+            <em style="color: rgba(255,255,255,0.5);">One day... I promise.</em>
+        </div>
+        <button class="next-btn" onclick="scrollToSection('sec-fight')">Continue →</button>
+    </div>
+
+    <!-- SECTION 6: The Fight -->
+    <div class="section fight-section" id="sec-fight">
+        <h2>Our Only Fight</h2>
+        <div class="vs-display">
+            <div class="us">Us ❤️‍🔥</div>
+            <div class="vs-text">VS</div>
+            <div class="enemy">Distance 📏</div>
+        </div>
+        <div class="fight-message">
+            This distance is the <span class="highlight">only fight</span> we have.<br><br>
+            And I can't win it alone.<br><br>
+            I need you — as my <span class="highlight">partner</span>, my teammate, my player 2 — to beat this together.<br><br>
+            <span style="font-size: 1.4rem;">I love you so much. 💕</span>
+        </div>
+        <button class="next-btn" onclick="scrollToSection('sec-wedding')">Continue →</button>
+    </div>
+
+    <!-- SECTION 7: Wedding Invitation (Manifesting!) -->
+    <div class="section wedding-section" id="sec-wedding">
+        <div class="wedding-card">
+            <div class="wedding-tag">✨ Manifesting ✨</div>
+            <div class="wedding-manifesting">(claiming it! haha 😂)</div>
+
+            <div class="wedding-invited">You Are Invited!</div>
+            <div class="wedding-of">to the wedding of</div>
+
+            <div class="wedding-divider"></div>
+
+            <div class="wedding-names">
+                <span class="groom">Zyril Evangelista</span>
+                <div class="wedding-and">&amp;</div>
+                <span class="bride">Jennyfer Arellano</span>
+            </div>
+
+            <div class="wedding-divider"></div>
+
+            <div class="wedding-rings">💍💍</div>
+
+            <div class="wedding-details">
+                <div class="date">Coming Soon... (God's perfect timing)</div>
+                📍 Wherever our love takes us<br>
+                🕊️ When 1,814 km becomes 0
+            </div>
+
+            <div class="wedding-funny">
+                Yes, even the bride is invited because I made this 😂<br>
+                Surprise babe! You're the guest AND the bride! 💀❤️
+            </div>
+        </div>
+
+        <button class="next-btn" onclick="scrollToSection('sec-contact')" style="margin-top:30px">One More Thing... →</button>
+    </div>
+
+    <!-- SECTION 8: Contact / Reach Me -->
+    <div class="section contact-section" id="sec-contact">
+        <h2>I Want to Hear From You</h2>
+        <p style="color: rgba(255,255,255,0.6); margin-bottom: 30px; max-width: 450px;">
+            After all of this... I really want to know what you think. Message me anytime. ❤️
+        </p>
+
+        <div class="contact-links">
+            <a href="https://www.facebook.com/zyril.evangelista.9/" target="_blank" rel="noopener noreferrer" class="contact-link fb">
+                📘 Message me on Facebook
+            </a>
+            <a href="mailto:zyril.evangelista@gmail.com" class="contact-link email">
+                ✉️ zyril.evangelista@gmail.com
+            </a>
+        </div>
+
+        <p class="final-message">I love you, always and forever.</p>
+        <p class="final-km">1,814 km apart — but forever in my heart ❤️</p>
+    </div>
+
+    <script>
+        // Create stars
+        (function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+                container.appendChild(star);
+            }
+        })();
+
+        // Create floating hearts
+        (function createHearts() {
+            const container = document.getElementById('heartsBg');
+            const hearts = ['❤️', '💕', '💗', '💖', '💘'];
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (14 + Math.random() * 20) + 'px';
+                container.appendChild(heart);
+            }
+        })();
+
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for section visibility
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    if (entry.target.id === 'sec-notbest') triggerTypewriter();
+                    if (entry.target.id === 'sec-lucky') animateDistance();
+                    if (entry.target.id === 'sec-money') startMoneyAnimation();
+                    if (entry.target.id === 'sec-wedding') launchConfetti();
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.section').forEach(sec => {
+            if (sec.id !== 'sec-landing') observer.observe(sec);
+        });
+
+        // Start journey + play music
+        function startJourney() {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.4;
+            music.play().catch(() => {});
+            scrollToSection('sec-sorry');
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Typewriter animation
+        let typewriterTriggered = false;
+        function triggerTypewriter() {
+            if (typewriterTriggered) return;
+            typewriterTriggered = true;
+            const lines = document.querySelectorAll('#typewriter .line');
+            lines.forEach((line, i) => {
+                const delay = parseInt(line.dataset.delay) || i * 500;
+                setTimeout(() => line.classList.add('show'), delay);
+            });
+        }
+
+        // Distance counter animation
+        let distanceTriggered = false;
+        function animateDistance() {
+            if (distanceTriggered) return;
+            distanceTriggered = true;
+            const el = document.getElementById('distanceCounter');
+            const target = 1814;
+            const duration = 2500;
+            const start = performance.now();
+
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                el.innerHTML = current.toLocaleString() + ' <span>km</span>';
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        // Money animation
+        let moneyTriggered = false;
+        function startMoneyAnimation() {
+            if (moneyTriggered) return;
+            moneyTriggered = true;
+
+            const container = document.getElementById('moneyRain');
+            const moneyEmojis = ['💵', '💴', '💶', '💷', '💰', '💎', '🤑'];
+
+            function spawnMoney() {
+                const money = document.createElement('div');
+                money.className = 'money-emoji';
+                money.textContent = moneyEmojis[Math.floor(Math.random() * moneyEmojis.length)];
+                money.style.left = Math.random() * 100 + '%';
+                money.style.animationDuration = (3 + Math.random() * 4) + 's';
+                money.style.animationDelay = '0s';
+                money.style.fontSize = (1.5 + Math.random() * 1.5) + 'rem';
+                container.appendChild(money);
+                setTimeout(() => money.remove(), 8000);
+            }
+
+            for (let i = 0; i < 30; i++) {
+                setTimeout(spawnMoney, i * 200);
+            }
+            setInterval(() => {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(spawnMoney, i * 150);
+                }
+            }, 1500);
+
+            const stack = document.getElementById('moneyStack');
+            const stackEmojis = ['💵', '💵', '💵', '💰', '💵', '💵', '💵', '💰', '💎', '💰'];
+            stackEmojis.forEach((emoji, i) => {
+                const bill = document.createElement('div');
+                bill.className = 'bill';
+                bill.textContent = emoji;
+                stack.appendChild(bill);
+                setTimeout(() => bill.classList.add('stacked'), 300 + i * 200);
+            });
+        }
+
+        // Confetti for wedding section
+        let confettiTriggered = false;
+        function launchConfetti() {
+            if (confettiTriggered) return;
+            confettiTriggered = true;
+
+            const colors = ['#ff6b9d', '#ffd700', '#ff9ff3', '#4FC3F7', '#ffd93d', '#c44569', '#fff'];
+
+            function spawnConfetti() {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+                piece.style.width = (5 + Math.random() * 8) + 'px';
+                piece.style.height = (5 + Math.random() * 8) + 'px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 5000);
+            }
+
+            for (let i = 0; i < 60; i++) {
+                setTimeout(spawnConfetti, i * 80);
+            }
+            // Second wave
+            setTimeout(() => {
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(spawnConfetti, i * 100);
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
